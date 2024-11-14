@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import formidable from 'formidable';
 import path from 'path';
-import fs from 'fs/promises';
 
 
 export async function POST(req) {
@@ -11,7 +10,7 @@ export async function POST(req) {
   });
 
   return new Promise((resolve, reject) => {
-    form.parse(req, async (err, fields, files) => {
+    form.parse(req, async (err) => {
       if (err) {
         reject(new NextResponse('Error while uploading', { status: 500 }));
       }

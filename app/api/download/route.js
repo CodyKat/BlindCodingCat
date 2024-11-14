@@ -15,6 +15,7 @@ export async function GET(req) {
       },
     });
   } catch (err) {
+    console.log(err);
     return new Response('File not found', { status: 404 });
   }
 }

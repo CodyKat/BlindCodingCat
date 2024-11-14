@@ -10,6 +10,7 @@ export async function GET() {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (err) {
+    console.log(err);
     return new Response('Failed to read directory', { status: 500 });
   }
 }
