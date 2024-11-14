@@ -1,16 +1,32 @@
-import { IncomingForm } from 'formidable';
-import path from 'path';
+import { NextRequest, NextResponse } from "next/server";
+import path from "path";
+import fs from "fs";
 
-const form = new IncomingForm({
-  uploadDir: path.join(process.cwd(), 'public/uploaded-files'),
-  keepExtensions: true,
-});
+const UPLOAD_DIR = path.resolve(process.env.ROOT_PATH ?? "", "public/uploads");
 
-form.parse(req, (err, fields, files) => {
-  if (err) {
-    console.error('File parsing error:', err);
-    return res.status(500).send('Error during file upload.');
+export const POST = async (req: NextRequest) => {
+  const formData = await req.formData();
+  const body = Object.fromEntries(formData);
+  const file = (body.file as Blob) || null;
+
+  if (file) {
+    const buffer = Buffer.from(await file.arrayBuffer());
+    if (!fs.existsSync(UPLOAD_DIR)) {
+      fs.mkdirSync(UPLOAD_DIR);
+    }
+
+    fs.writeFileSync(
+      path.resolve(UPLOAD_DIR, (body.file as File).name),
+      buffer
+    );
+  } else {
+    return NextResponse.json({
+      success: false,
+    });
   }
-  // Handle the fields and files
-  res.status(200).json({ fields, files });
-});
+
+  return NextResponse.json({
+    success: true,
+    name: (body.file as File).name,
+  });
+};
