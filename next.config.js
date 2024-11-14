@@ -1,6 +1,6 @@
-module.exports = {
+export default {
+    reactStrictMode: true,
     api: {
-      bodyParser: false,
+      bodyParser: false, // API 라우트에서 body parsing을 비활성화
     },
   };
-  

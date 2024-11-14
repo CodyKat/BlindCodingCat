@@ -1,4 +1,5 @@
 import { IncomingForm } from 'formidable';
+import path from 'path';
 
 const form = new IncomingForm({
   uploadDir: path.join(process.cwd(), 'public/uploaded-files'),
